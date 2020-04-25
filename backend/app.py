@@ -30,14 +30,14 @@ def connect():
     })
 
 
-@socketio.on('F2B_new_logging')
-def new_logging(payload):
-    amount = payload.get('amount', 0)
-    print("registering new loggin of %sml" % amount)
+@socketio.on('F2B_pause')
+def pause(payload):
+    socketio.emit('pause-video', {'time': payload.get('time', 0)})
 
-    data = DataRepository.create_log(datetime.now(), amount)  # returns id of the new row
-    if data is not None:
-        socketio.emit("B2F_addProgress", {"amount": amount}, broadcast=True)
+
+@socketio.on('F2B_play')
+def play(payload):
+    socketio.emit('play-video', {'time': payload.get('time', 0)})
 
 
 # START THE APP

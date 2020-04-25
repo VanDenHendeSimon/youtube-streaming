@@ -6,6 +6,13 @@ html {
     background: #fafafa;
     -webkit-font-smoothing: antialiased;
 }
+
+p {
+    padding: 0;
+    margin: 0;
+    margin-top: 0.5em;
+}
+
 ::-moz-selection {
     background: #1990c7;
     color: #fafafa;
@@ -16,10 +23,14 @@ html {
 }
 
 .o-container {
-    max-width: 700px;
-    margin-top: 50px;
+    margin-top: 1.2em;
     margin-left: auto;
     margin-right: auto;
+}
+
+.controls {
+  width: 80%;
+  margin: auto;
 }
 
 #player {
@@ -27,7 +38,7 @@ html {
 }
 
 .c-button {
-    margin-top: 0.5em;
+    margin-top: 1em;
     height: 2.5em;
     margin-right: 0.5em;
     width: 8em;
@@ -47,4 +58,25 @@ html {
 .c-button:hover {
     background-color: #1990c7;
     color: white;
+}
+
+.timeline {
+    margin-top: 16px;
+    width: 100%;
+    height: 2px;
+    background-color: black;
+}
+
+.slider {
+    width: 1em;
+    height: 1em;
+    border-radius: 0 50% 50% 0;
+    background-color: black;
+    margin-top: -0.5em;
+}
+
+.time-tags {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
 }
