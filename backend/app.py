@@ -23,8 +23,6 @@ def info():
 # SOCKET.IO EVENTS
 @socketio.on('connect')
 def connect():
-    print("Een nieuwe client connectie")
-
     socketio.emit("connection_recieved", {
         "clientID": request.sid
     })
