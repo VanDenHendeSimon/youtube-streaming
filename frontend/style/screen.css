@@ -70,7 +70,7 @@ p {
 .slider {
     width: 1em;
     height: 1em;
-    border-radius: 0 50% 50% 0;
+    border-radius: 50%;
     background-color: black;
     margin-top: -0.5em;
 }
