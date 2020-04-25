@@ -68,11 +68,13 @@ p {
 }
 
 .slider {
+    position: relative;
     width: 1em;
     height: 1em;
+    background-color: white;
+    border: solid 0.15em black;
     border-radius: 50%;
-    background-color: black;
-    margin-top: -0.5em;
+    top: -0.65em; /* -0.5 (size * 0.5) - 0.15 (border) */
 }
 
 .time-tags {
