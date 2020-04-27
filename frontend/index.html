@@ -18,18 +18,17 @@
             crossorigin="anonymous"
         ></script>
         <script src="script/dataHandler.js"></script>
-        <script src="script/app.js"></script>
+        <script src="script/index.js"></script>
     </head>
     <body>
-        <div class="o-container">
-            <!-- 1. The <iframe> (and video player) will replace this <div> tag. -->
-            <div id="player"></div>
-            <div class="controls">
-              <button id="btn-play" class="c-button">Play</button>
-              <button id="btn-pause" class="c-button">Pause</button>
-              <div class="timeline"></div>
-              <div class="slider"></div>
-              <div class="time-tags"></div>
+        <div class="input-container">
+            <input type="text" name="lobbyIdInputField" id="lobbyIdInputField" placeholder="">
+            <div class="buttons">
+                <button id="btn-create" class="c-button c-button--index">Create Party</button>
+                <button id="btn-join" class="c-button c-button--index">Join Party</button>
+            </div>
+            <div class="gif">
+                <img src="img/party.gif" alt="GIF of a party">
             </div>
         </div>
     </body>

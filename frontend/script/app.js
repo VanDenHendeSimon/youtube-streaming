@@ -3,7 +3,7 @@
 const lanIP = `${window.location.hostname}:5000`;
 const socketio = io(lanIP);
 const endPoint = `http://${lanIP}/api/v1`;
-let containerWidth, duration;
+let video, containerWidth, duration;
 let screenWidth, screenHeight;
 
 const loadIFramePlayer = function () {
@@ -19,27 +19,32 @@ let player;
 function onYouTubeIframeAPIReady() {
     // 3. This function creates an <iframe> (and YouTube player)
     //    after the API code downloads.
-    player = new YT.Player("player", {
-        height: `${screenHeight}`,
-        width: `${screenWidth}`,
-        videoId: "FGBhQbmPwH8",
-        events: {
-            onReady: onPlayerReady,
-            onStateChange: onPlayerStateChange,
-        },
-        playerVars: {
-            controls: 0,
-            autoplay: 0,
-            disablekb: 1,
-            fs: 1,
-        },
-    });
+    try {
+        player = new YT.Player("player", {
+            height: `${screenHeight}`,
+            width: `${screenWidth}`,
+            videoId: video,
+            events: {
+                onReady: onPlayerReady,
+                onStateChange: onPlayerStateChange,
+            },
+            playerVars: {
+                controls: 0,
+                autoplay: 0,
+                disablekb: 1,
+                fs: 1,
+            },
+        });
+    }   catch {
+        document.querySelector('#player').innerHTML = "Could not find video";
+    }
 }
 
 function onPlayerReady(event) {
     // 4. The API will call this function when the video player is ready.
     event.target.playVideo();
     fillTimeTags();
+    setPartyName();
 }
 
 var done = false;
@@ -112,6 +117,10 @@ const listenToSocket = function () {
         player.seekTo(payload.time);
         player.playVideo();
     });
+
+    socketio.on('B2F_ClientCount', function(payload) {
+        document.querySelector('.lobby').querySelector('p').innerHTML = `Welcome to the party!</br>${payload.partyName} - ${payload.count} people are listening`;
+    })
 };
 
 const formatSeconds = function (timeInSeconds) {
@@ -140,8 +149,23 @@ const setDimensions = function() {
     }   catch {}
 }
 
+const setPartyName = function() {
+    const path = window.location.pathname;
+    const partyName = path.substring(
+        path.lastIndexOf("/") + 1, 
+        path.lastIndexOf(".")
+    );
+
+    socketio.emit('F2B_ClientCount', { partyName: `${partyName}.html` });
+}
+
 const init = function () {
     console.log("dom content loaded");
+    
+    const queryString = new URLSearchParams(window.location.search);
+    if (queryString.has('v')) {
+        video = queryString.get('v');
+    }
 
     setDimensions();
     loadIFramePlayer();
