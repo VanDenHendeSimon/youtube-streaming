@@ -2,6 +2,7 @@ from flask_socketio import SocketIO
 from flask import Flask, jsonify, request, render_template
 from flask_cors import CORS
 import os
+import re
 import shutil
 
 
@@ -18,15 +19,34 @@ CORS(app)
 endpoint = '/api/v1'
 
 
+def set_party_name(filepath, party_name):
+    # read html file
+    with open(filepath, 'r') as open_file:
+        content = open_file.read()
+
+    # replace updated data-party-name attribute in the html
+    content = re.sub(
+        r'data-party-name=\"\"',
+        'data-party-name=\"%s\"' % party_name,
+        content
+    )
+
+    # write html file
+    with open(filepath, 'w') as write_file:
+        write_file.write(content)
+
+
 def verify_party(party_name):
-    party_filepath = "%s.html" % party_name.replace(' ', '_')
+    party_filepath = party_name.replace(' ', '_')
+    party_filepath = re.sub(r'\W+', '', party_filepath)
+
     payload = {
         'in_progress': os.path.exists(os.path.join(template_dir, party_filepath)),
         # v= of an instruction video about the website
-        'url': 'http://127.0.0.1:5500/frontend/%s?v=dghxOOtTP5I' % party_filepath
+        'url': 'http://127.0.0.1:5500/frontend/%s.html?v=X2zcG3bcuMI' % party_filepath,
     }
 
-    return payload
+    return payload, '%s.html' % party_filepath
 
 
 # ROUTES
@@ -37,14 +57,16 @@ def info():
 
 @app.route(endpoint+'/create/<party_name>')
 def craete_party(party_name):
-    payload = verify_party(party_name)
+    payload, filepath = verify_party(party_name)
 
     if not payload.get('in_progress', True):
-        shutil.copyfile(
-            os.path.join(template_dir, "basePlayer.html"),
-            # Get last bit after the / but before the querystring (?)
-            os.path.join(template_dir, payload['url'].split("/")[-1].split("?")[0]),
-        )
+        source_file = os.path.join(template_dir, "basePlayer.html")
+        destinale_filepath = os.path.join(template_dir, filepath)
+
+        # Copy file
+        shutil.copyfile(source_file, destinale_filepath)
+        # Change file
+        set_party_name(destinale_filepath, party_name)
 
     return jsonify(payload), 200
 
@@ -76,7 +98,7 @@ def play(payload):
 def client_count(payload):
     print("Got client count request")
     socketio.emit('B2F_ClientCount', {
-        'partyName': payload.get("partyName", 'name undefiend').replace('.html', ''),
+        'partyName': payload.get("partyName", 'name undefiend').replace('.html', '').replace('_', ' '),
         'count': 10
     })
 

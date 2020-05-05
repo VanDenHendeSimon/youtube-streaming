@@ -119,7 +119,8 @@ const listenToSocket = function () {
     });
 
     socketio.on('B2F_ClientCount', function(payload) {
-        document.querySelector('.lobby').querySelector('p').innerHTML = `Welcome to the party!</br>${payload.partyName} - ${payload.count} people are listening`;
+        const partyName = document.querySelector('.lobby').getAttribute('data-party-name');
+        document.querySelector('.lobby').querySelector('p').innerHTML = `Welcome to the party!</br>${partyName} - ${payload.count} people are listening`;
     })
 };
 
