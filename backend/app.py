@@ -38,15 +38,15 @@ def set_party_name(filepath, party_name):
 
 def verify_party(party_name):
     party_filepath = party_name.replace(' ', '_')
-    party_filepath = re.sub(r'\W+', '', party_filepath)
+    party_filepath = '%s.html' % (re.sub(r'\W+', '', party_filepath).lower())
 
     payload = {
         'in_progress': os.path.exists(os.path.join(template_dir, party_filepath)),
         # v= of an instruction video about the website
-        'url': 'http://127.0.0.1:5500/frontend/%s.html?v=X2zcG3bcuMI' % party_filepath,
+        'url': 'http://127.0.0.1:5500/frontend/%s?v=X2zcG3bcuMI' % party_filepath,
     }
 
-    return payload, '%s.html' % party_filepath
+    return payload, party_filepath
 
 
 # ROUTES
