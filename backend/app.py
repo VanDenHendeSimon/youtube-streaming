@@ -43,7 +43,7 @@ def verify_party(party_name):
     payload = {
         'in_progress': os.path.exists(os.path.join(template_dir, party_filepath)),
         # v= of an instruction video about the website
-        'url': 'http://127.0.0.1:5500/frontend/%s?v=X2zcG3bcuMI' % party_filepath,
+        'url': 'http://127.0.0.1:5500/frontend/%s?v=FGBhQbmPwH8' % party_filepath,
     }
 
     return payload, party_filepath
